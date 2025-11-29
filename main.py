@@ -1,18 +1,10 @@
 import os
 import feedparser
-import smtplib
-from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from openai import OpenAI
-from email.utils import formataddr
-
-
 import requests
 import json
-
-
-
 
 # Carica le variabili ambiente (.env in locale, su Railway userai env vars)
 load_dotenv()
@@ -271,6 +263,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
