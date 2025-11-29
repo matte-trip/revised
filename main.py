@@ -7,6 +7,13 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from email.utils import formataddr
 
+
+import requests
+import json
+
+
+
+
 # Carica le variabili ambiente (.env in locale, su Railway userai env vars)
 load_dotenv()
 
@@ -174,23 +181,48 @@ def build_email_html(main_articles, other_articles) -> str:
     return "\n".join(html)
 
 def send_email(subject: str, html_body: str):
-    print("✉️ Preparazione email...")
-    print(f"   FROM: {EMAIL_USER}")
-    print(f"   TO:   {EMAIL_TO}")
-    msg = MIMEText(html_body, "html", "utf-8")
-    msg["Subject"] = subject
-    msg["From"] = formataddr(("HDblog Digest", EMAIL_USER))
-    msg["To"] = EMAIL_TO
+    api_key = os.getenv("MAILERSEND_API_KEY")
+    sender = os.getenv("MAILERSEND_FROM")
+    sender_name = os.getenv("MAILERSEND_FROM_NAME")
+    recipient = EMAIL_TO
+
+    if not api_key or not sender or not sender_name:
+        print("❌ Variabili MAILERSEND non trovate")
+        return
+
+    url = "https://api.mailersend.com/v1/email"
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "from": {
+            "email": sender,
+            "name": sender_name
+        },
+        "to": [
+            {
+                "email": recipient
+            }
+        ],
+        "subject": subject,
+        "html": html_body
+    }
+
+    print("📨 Invio email tramite Mailersend API...")
 
     try:
-        print("🔐 Connessione a smtp.gmail.com:465...")
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as server:
-            server.login(EMAIL_USER, EMAIL_PASS)
-            print("✅ Login SMTP riuscito, invio messaggio...")
-            server.send_message(msg)
-        print("✅ Email inviata con successo.")
+        r = requests.post(url, headers=headers, data=json.dumps(payload))
+        if r.status_code == 202:
+            print("✅ Email inviata con successo tramite Mailersend.")
+        else:
+            print(f"❌ Errore Mailersend ({r.status_code}): {r.text}")
+
     except Exception as e:
-        print(f"❌ Errore durante l'invio dell'email: {e}")
+        print(f"❌ Eccezione durante invio Mailersend: {e}")
+
 
 
 
@@ -239,5 +271,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
