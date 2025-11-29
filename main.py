@@ -184,13 +184,14 @@ def send_email(subject: str, html_body: str):
 
     try:
         print("🔐 Connessione a smtp.gmail.com:465...")
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=15) as server:
             server.login(EMAIL_USER, EMAIL_PASS)
             print("✅ Login SMTP riuscito, invio messaggio...")
             server.send_message(msg)
         print("✅ Email inviata con successo.")
     except Exception as e:
         print(f"❌ Errore durante l'invio dell'email: {e}")
+
 
 
 def main():
@@ -238,4 +239,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
