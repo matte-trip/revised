@@ -173,16 +173,24 @@ def build_email_html(main_articles, other_articles) -> str:
     html.append("</body></html>")
     return "\n".join(html)
 
-
 def send_email(subject: str, html_body: str):
+    print("✉️ Preparazione email...")
+    print(f"   FROM: {EMAIL_USER}")
+    print(f"   TO:   {EMAIL_TO}")
     msg = MIMEText(html_body, "html", "utf-8")
     msg["Subject"] = subject
     msg["From"] = formataddr(("HDblog Digest", EMAIL_USER))
     msg["To"] = EMAIL_TO
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(EMAIL_USER, EMAIL_PASS)
-        server.send_message(msg)
+    try:
+        print("🔐 Connessione a smtp.gmail.com:465...")
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(EMAIL_USER, EMAIL_PASS)
+            print("✅ Login SMTP riuscito, invio messaggio...")
+            server.send_message(msg)
+        print("✅ Email inviata con successo.")
+    except Exception as e:
+        print(f"❌ Errore durante l'invio dell'email: {e}")
 
 
 def main():
@@ -230,3 +238,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
