@@ -13,7 +13,7 @@ print("DEBUG VARS:")
 print("MAILERSEND_API_KEY:", os.getenv("MAILERSEND_API_KEY"))
 print("MAILERSEND_FROM:", os.getenv("MAILERSEND_FROM"))
 print("MAILERSEND_FROM_NAME:", os.getenv("MAILERSEND_FROM_NAME"))
-print("EMAIL_TO:", EMAIL_TO)
+print("EMAIL_TO:", os.getenv("EMAIL_TO"))
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -269,6 +269,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
