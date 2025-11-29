@@ -223,10 +223,9 @@ def send_email(subject: str, html_body: str):
 
 
 
-
 def main():
-    if not (OPENAI_API_KEY and EMAIL_USER and EMAIL_PASS and EMAIL_TO):
-        print("⚠️ Variabili ambiente mancanti. Controlla OPENAI_API_KEY, EMAIL_USER, EMAIL_PASS, EMAIL_TO.")
+    if not (OPENAI_API_KEY and EMAIL_TO and os.getenv("MAILERSEND_API_KEY") and os.getenv("MAILERSEND_FROM") and os.getenv("MAILERSEND_FROM_NAME")):
+        print("❌ Variabili ambiente mancanti. Controlla OPENAI_API_KEY, MAILERSEND_API_KEY, MAILERSEND_FROM, MAILERSEND_FROM_NAME, EMAIL_TO.")
         return
 
     print("🔎 Fetch RSS...")
@@ -269,6 +268,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
