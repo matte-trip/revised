@@ -60,9 +60,9 @@ def rewrite_title_and_summary(original_title: str, description: str) -> tuple[st
         "Sei un assistente che rielabora articoli tech per un digest email giornaliero.\n"
         "Per ogni articolo:\n"
         "- Riscrivi il titolo in modo chiaro, informativo e non commerciale.\n"
-        "- Usa il formato 'Prodotto/Azienda – breve descrizione tecnica'.\n"
+        "- Usa il formato 'Azienda, Prodotto – Main takeaway dall'articolo'.\n"
         "- Evita parole come 'offerta', 'super sconto', 'best buy', 'prezzo minimo'.\n"
-        "- Poi, se necessario, aggiungi una mini-descrizione (massimo 30 parole) che chiarisca il contenuto.\n"
+        "- Poi, se necessario poichè il titolo non è pienamente esplicativo o c'è qualche interessante dettaglio da condividere, aggiungi una mini-descrizione (massimo 30 parole) che chiarisca il contenuto.\n"
         "- Se il titolo originale è già chiaro, rendilo solo più ordinato e compatto.\n"
         "Rispondi nel seguente formato esatto:\n"
         "TITOLO: <titolo riscritto>\n"
@@ -75,13 +75,13 @@ def rewrite_title_and_summary(original_title: str, description: str) -> tuple[st
     )
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",  # puoi usare gpt-3.5-turbo se preferisci
+        model="gpt-5-mini",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
         max_tokens=200,
-        temperature=0.4,
+        temperature=0.2,
     )
 
     content = response.choices[0].message.content.strip()
@@ -146,7 +146,6 @@ def fetch_articles_last_24h():
 def build_email_html(main_articles, other_articles) -> str:
     html = []
     html.append("<html><body>")
-    html.append("<h2>Articoli rilevanti</h2>")
 
     if not main_articles:
         html.append("<p>Nessun articolo rilevante nelle ultime 24 ore.</p>")
@@ -162,7 +161,7 @@ def build_email_html(main_articles, other_articles) -> str:
         html.append("</ul>")
 
     html.append("<hr>")
-    html.append("<h3>Altri articoli</h3>")
+    html.append("<h3>Altro</h3>")
 
     if not other_articles:
         html.append("<p>Nessun altro articolo.</p>")
@@ -268,6 +267,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
