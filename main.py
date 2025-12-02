@@ -20,7 +20,7 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
 EMAIL_TO = os.getenv("EMAIL_TO")
 
-RSS_URL = "https://www.hdblog.it/feed/"  # puoi cambiare feed se preferisci
+RSS_URL = "https://www.hdblog.it/rss/"  # puoi cambiare feed se preferisci
 HOURS_BACK = 24  # finestra temporale
 
 client = OpenAI(api_key=OPENAI_API_KEY)
@@ -267,6 +267,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
