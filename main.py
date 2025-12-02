@@ -2,18 +2,12 @@ import os
 import feedparser
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai impiort OpenAI
 import requests
 import json
 
 # Carica le variabili ambiente (.env in locale, su Railway userai env vars)
 load_dotenv()
-
-print("DEBUG VARS:")
-print("MAILERSEND_API_KEY:", os.getenv("MAILERSEND_API_KEY"))
-print("MAILERSEND_FROM:", os.getenv("MAILERSEND_FROM"))
-print("MAILERSEND_FROM_NAME:", os.getenv("MAILERSEND_FROM_NAME"))
-print("EMAIL_TO:", os.getenv("EMAIL_TO"))
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 EMAIL_USER = os.getenv("EMAIL_USER")
@@ -80,7 +74,6 @@ def rewrite_title_and_summary(original_title: str, description: str) -> tuple[st
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
-        max_tokens=200,
         temperature=0.2,
     )
 
@@ -107,7 +100,7 @@ def fetch_articles_last_24h():
     """
     feed = feedparser.parse(RSS_URL)
     articles = []
-    now = datetime.utcnow()
+    now = datetime.datetime.now(datetime.UTC)
     cutoff = now - timedelta(hours=HOURS_BACK)
 
     for entry in feed.entries:
@@ -267,6 +260,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
